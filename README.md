@@ -5,7 +5,7 @@
 
 这些文字上的东西我也说的不太清楚，在下面我会尽可能使用代码来让大家明白静态代理和动态代理这两种方式的原理！说清楚原理之后我再说下代理模式能帮我们做什么？？
 
-tip：这里我用的IntelliJ IDEA写的java项目来做的示例，有想做示例的同学千万不要用Android项目来写，源代码会有所不同！！！
+tip：这里我用的IntelliJ IDEA写的java项目来做的示例，有想做示例的同学千万不要用Android项目来写，源代码会有所不同！！！还有接下来文章比较长，希望大家能耐心看完，看完收获是肯定有的。
 
 
 # 静态代理
@@ -371,9 +371,20 @@ public class DynamicProxyHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         System.out.println("代理前的统一操作");
-
-        // 调用真实对象的行为
-        Object invoke = method.invoke(mObject, args);
+        Object invoke;
+        // 这里可以根据不同方法名进行不同的操作
+        if ("sing".equals(method.getName())) {
+            // 拦截下唱歌
+            // 明星唱歌前经纪人要跟活动商做好相关的布置。
+            System.out.println("经纪人跟活动商进行唱歌前布置。");
+            // 调用真实对象的行为
+            invoke = method.invoke(mObject, args);
+            // 明星唱完歌后经纪人要做好收尾工作（例如把出演费收到账等等）。
+            System.out.println("经纪人跟活动商做收尾工作（例如把出演费收到账等等）。");
+        }else{
+            // 调用真实对象的行为
+            invoke = method.invoke(mObject, args);
+        }
 
         System.out.println("代理后的统一操作");
 
@@ -418,7 +429,8 @@ public class DynamicProxyHandler implements InvocationHandler {
 
 然后我们在控制台看下日志的打印情况：
 
-![](https://user-gold-cdn.xitu.io/2019/1/23/1687a61bd2c22af7?w=139&h=173&f=jpeg&s=16079)
+![](https://user-gold-cdn.xitu.io/2019/1/24/1687f1197c48d4d7?w=401&h=197&f=png&s=40903)
+
 
 从上面可以知道我们代理是成功了的，但是这里还没有完善，后面再补充，这里可能有同学会问了，为什么这么写就实现动态代理了呢？原理是什么呢？不慌，下面我们通过源码和反编译来追踪分析一下：
 
@@ -938,7 +950,7 @@ public final class $Proxy0 extends Proxy implements ISkillAction, ILiveAction {
                 
 我们可以通过这个方法拿到代理类Class的byte[]后自己保存成.class文件，代码如下：
 
-![](https://user-gold-cdn.xitu.io/2019/1/24/1687eecc3bd8c3bc?w=857&h=755&f=png&s=166037)
+![](https://user-gold-cdn.xitu.io/2019/1/24/1687f127ac2f8802?w=809&h=585&f=png&s=135559)
 
 运行一下后可以看到我们的项目中生成了一个文件 ：
 
@@ -982,9 +994,20 @@ public class DynamicProxyHandler implements InvocationHandler, Serializable {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         System.out.println("代理前的统一操作");
-
-        // 调用真实对象的行为
-        Object invoke = method.invoke(mObject, args);
+        Object invoke;
+        // 这里可以根据不同方法名进行不同的操作
+        if ("sing".equals(method.getName())) {
+            // 拦截下唱歌
+            // 明星唱歌前经纪人要跟活动商做好相关的布置。
+            System.out.println("经纪人跟活动商进行唱歌前布置。");
+            // 调用真实对象的行为
+            invoke = method.invoke(mObject, args);
+            // 明星唱完歌后经纪人要做好收尾工作（例如把出演费收到账等等）。
+            System.out.println("经纪人跟活动商做收尾工作（例如把出演费收到账等等）。");
+        }else{
+            // 调用真实对象的行为
+            invoke = method.invoke(mObject, args);
+        }
 
         System.out.println("代理后的统一操作");
 
