@@ -66,7 +66,7 @@ public class JavaProxyTest {
         byte[] bytes = ProxyGenerator.generateProxyClass("$Proxy0", star.getClass().getInterfaces());
 
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("");
+            FileOutputStream fileOutputStream = new FileOutputStream("./$Proxy0.class");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(bytes);
             objectOutputStream.flush();
